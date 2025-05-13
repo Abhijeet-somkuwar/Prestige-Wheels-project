@@ -45,16 +45,18 @@
                         <div class="form-group mb-0 clearfix">
                             <button type="submit" class="btn-md btn-theme float-left">Login</button>
                         </div>
-                        <div class="extra-login clearfix">
+                        {% comment %} <div class="extra-login clearfix">
                             <span>Or Login With</span>
-                        </div>
+                        </div> {% endcomment %}
                         <div class="clearfix"></div>
-                        <ul class="social-list">
+                        {% comment %} <ul class="social-list">
                             <li><a href="{% provider_login_url 'facebook' method='js_sdk' %}" class="facebook-bg"><i class="fa fa-facebook facebook-i"></i><span>Facebook</span></a></li>
                             <li><a href="{% provider_login_url 'google' %}" class="google-bg"><i class="fa fa-google google-i"></i><span>Google</span></a></li>
-                        </ul>
+                        </ul> {% endcomment %}
                     </form>
+                    <br/>
                     <p>Don't have an account? <a href="{% url 'register' %}" class="thembo"> Register here</a></p>
+                    {% comment %} <p><a href="{% url 'reset_password' %}">Forgot your password?</a></p> {% endcomment %}
                 </div>
             </div>
         </div>

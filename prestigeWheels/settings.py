@@ -28,12 +28,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL = 'dashboard'
+
 
 # Application definition
 
 INSTALLED_APPS = [
     'cars.apps.CarsConfig',
     'pages.apps.PagesConfig',
+    'accounts.apps.AccountsConfig',
+    'contacts.apps.ContactsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ckeditor',
     'django.contrib.humanize',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # Providers
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +64,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Add this line
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'prestigeWheels.urls'
@@ -81,10 +95,11 @@ WSGI_APPLICATION = 'prestigeWheels.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prestigecar_db',
+        'NAME': 'prestige_car_db',
         'USER': 'postgres',
         'PASSWORD': 'Abhijeet@26',
         'HOST': 'localhost',
+        'PORT': '5433',
     }
 }
 
@@ -143,4 +158,13 @@ MESSAGE_TAGS = {
 }
 
 SITE_ID = 1
+
+
+# Email sending
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'abhijeet.idevifysolutions@gmail.com'
+EMAIL_HOST_PASSWORD = 'zqay fghw kpyz vkdy'
+EMAIL_USE_TLS = True
+
 
