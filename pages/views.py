@@ -9,7 +9,7 @@ from django.contrib import messages
 
 def home(request):
     teams = Team.objects.all()
-    featured_cars = Car.objects.order_by('-created_date').filter(is_featured=True)
+    featured_cars = Car.objects.order_by('-created_date').filter(is_featured=True, is_sold=False)
     all_cars = Car.objects.order_by('-created_date')
     model_search = Car.objects.values_list('model', flat=True).distinct()
     city_search = Car.objects.values_list('city', flat=True).distinct()

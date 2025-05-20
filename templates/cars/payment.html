@@ -1,0 +1,89 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Prestige Cars | Payment for {{ car.car_title }}</title>
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+      .car-photo {
+        max-height: 300px;
+        object-fit: contain;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+    </style>
+</head>
+<body>
+
+<!-- Sub banner start -->
+<div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas">
+            <h1>Buy Car</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active">Payment</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Sub Banner end -->
+
+<!-- Payment form section -->
+<div class="contact-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 text-center">
+                <!-- Car Image -->
+                <img src="{{ car.car_photo.url }}" alt="{{ car.car_title }}" class="img-fluid car-photo">
+
+                <div class="form-section">
+                    <h3>Pay for <strong>{{ car.car_title }}</strong></h3>
+                    <p><strong>Price: </strong>₹{{ car.price|intcomma }}</p>
+
+                    <button id="rzp-button" class="btn btn-success btn-block btn-lg">Pay Now</button>
+                    <br>
+                    <a href="{% url 'home' %}" class="btn btn-outline-primary btn-block">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Payment form section end -->
+
+<script>
+    var options = {
+        "key": "{{ razorpay_key }}",
+        "amount": {{ car.price|floatformat:2|floatformat|add:'0' }} * 100,  // price in paise, careful with formatting
+        "currency": "INR",
+        "name": "Prestige Cars",
+        "description": "Purchase of {{ car.car_title }}",
+        "order_id": "{{ razorpay_order_id }}",  // razorpay order id from your backend
+        "handler": function (response){
+            //alert('Payment Successful! Payment ID: ' + response.razorpay_payment_id);
+            // Redirect after success with order details
+            window.location.href = "{% url 'payment_success' %}?order_id={{ order.id }}";
+        },
+        "prefill": {
+            "name": "{{ request.user.get_full_name|default:'' }}",
+            "email": "{{ request.user.email|default:'' }}"
+        },
+        "theme": {
+            "color": "#28a745"
+        }
+    };
+
+    var rzp = new Razorpay(options);
+    document.getElementById('rzp-button').onclick = function(e){
+        rzp.open();
+        e.preventDefault();
+    }
+</script>
+
+</body>
+</html>

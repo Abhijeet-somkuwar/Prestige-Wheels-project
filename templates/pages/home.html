@@ -80,7 +80,7 @@
                 </div>
                 <div class="range-slider clearfix">
                                 <label>Price</label>
-                                <div data-min="0" data-max="50000000"  data-min-name="min_price" data-max-name="max_price" data-unit="Rs" class="range-slider-ui ui-slider" aria-disabled="false"></div>
+                                <div data-min="0" data-max="500000"  data-min-name="min_price" data-max-name="max_price" data-unit="Rs" class="range-slider-ui ui-slider" aria-disabled="false"></div>
                                 <div class="clearfix"></div>
                             </div>
                 <div class="form-group">
@@ -212,7 +212,13 @@
                 <div class="car-box">
                     <div class="car-thumbnail">
                         <a href="{% url 'car_detail' car.id %}" class="car-img">
-                            <div class="tag">For Sale</div>
+                            <div class="tag {% if car.is_sold %}bg-danger{% else %}bg-success{% endif %}">
+                                {% if car.is_sold %}
+                                    SOLD
+                                {% else %}
+                                    For Sale
+                                {% endif %}
+                            </div>
                             <img class="d-block w-100" src="{{car.car_photo.url}}" alt="car" style="min-height: 262px; max-height: 262px;">
                             <div class="facilities-list clearfix">
                                 <ul>

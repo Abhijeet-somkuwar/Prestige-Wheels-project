@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 from ckeditor.fields import RichTextField
 from multiselectfield import MultiSelectField
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Car(models.Model):
@@ -101,6 +102,18 @@ class Car(models.Model):
     no_of_owners = models.CharField(max_length=100)
     is_featured = models.BooleanField(default=False)
     created_date = models.DateTimeField(default=datetime.now, blank=True)
+    is_sold = models.BooleanField(default=False)
 
     def __str__(self):
         return self.car_title
+
+
+class CarOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    order_date = models.DateTimeField(auto_now_add=True)
+    total_amount = models.IntegerField()
+    payment_status = models.CharField(max_length=20, default="pending")  # values: "pending", "paid"
+
+    def __str__(self):
+        return f"{self.user.username} - {self.car.car_title}"

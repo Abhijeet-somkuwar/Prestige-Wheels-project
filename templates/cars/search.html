@@ -114,7 +114,11 @@
                 <div class="car-box">
                     <div class="car-thumbnail">
                         <a href="{% url 'car_detail' car.id %}" class="car-img">
-                            <div class="tag">For Sale</div>
+                            {% if car.is_sold %}
+                                <div class="tag bg-danger">Sold</div>
+                            {% else %}
+                                <div class="tag bg-success">For Sale</div>
+                            {% endif %}
                             <img class="d-block w-100" src="{{car.car_photo.url}}" alt="car" style="min-height: 262px; max-height: 262px;">
                             <div class="facilities-list clearfix">
                                 <ul>

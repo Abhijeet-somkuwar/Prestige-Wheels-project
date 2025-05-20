@@ -153,12 +153,26 @@
             </div>
             <div class="col-lg-4 col-md-12">
                 <div class="sidebar-right">
-                    <!-- Advanced search start -->
                     <div class="widget advanced-search d-none-992">
-                        <button class="btn btn-outline-danger bomd btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Send message</button>
-
-
+                        {% if single_car.is_sold %}
+                            <div class="alert alert-danger text-center font-weight-bold">
+                                This car has already been sold.
+                            </div>
+                            <button class="btn btn-outline-secondary btn-block btn-lg" disabled>Send Message</button>
+                            <button class="btn btn-secondary btn-block btn-lg mt-3" disabled>Buy Now</button>
+                        {% else %}
+                            <button class="btn btn-outline-danger bomd btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Send message</button>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'initiate_payment' single_car.id %}" class="btn btn-success btn-block btn-lg mt-3">Buy Now</a>
+                            {% else %}
+                                <button class="btn btn-secondary btn-block btn-lg mt-3" disabled>Buy Now</button>
+                                <div class="alert alert-warning mt-2 mb-0">
+                                    Please <a href="{% url 'login' %}" class="alert-link">login</a> to buy this car.
+                                </div>
+                            {% endif %}
+                        {% endif %}
                         <br>
+                        <!-- Advanced search start -->
                         <h3 class="sidebar-title">Refine Your Search</h3>
                         <ul>
                             <li>

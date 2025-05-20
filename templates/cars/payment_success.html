@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Payment Success | PrestigeCars</title>
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .success-box {
+            background-color: #f9fdf9;
+            border: 2px solid #28a745;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .success-box h2 {
+            color: #28a745;
+            font-weight: 700;
+        }
+
+        .car-image {
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .order-details p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            padding: 10px 25px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sub banner start -->
+<div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas text-white">
+            <h1 class="text-uppercase">Payment Success</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'home' %}" class="text-white">Home</a></li>
+                <li class="active text-white">Payment Success</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Sub Banner end -->
+
+<!-- Success message section -->
+<div class="contact-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="success-box">
+                    <h2>Thank you for your purchase!</h2>
+
+                    <img src="{{ car.car_photo.url }}" alt="{{ car.car_title }}" class="img-fluid car-image my-4">
+
+                    <div class="order-details">
+                        <p>Your order for <strong>{{ car.car_title }}</strong> has been successfully processed.</p>
+                        <p><strong>Order ID:</strong> {{ order.id }}</p>
+                        <p><strong>Total Paid:</strong> ₹{{ order.total_amount }}</p>
+                    </div>
+
+                    <a href="{% url 'cars' %}" class="btn btn-danger mt-4">Back to Listings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Success message section end -->
+
+</body>
+</html>
