@@ -60,7 +60,7 @@ def register(request):
                 send_mail(subject, message, settings.EMAIL_HOST_USER, [email])
 
                 auth.login(request, user)
-                messages.success(request, 'You are now logged in.')
+                messages.success(request, 'You had succesfully loggrd in')
                 return redirect('dashboard')
         else:
             messages.error(request, 'Passwords do not match')
