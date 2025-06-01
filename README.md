@@ -29,7 +29,7 @@ PrestigeCars is a Django-based web application that allows users to buy and sell
 
 ## 📁 Project Structure
 
-``bash
+```bash
 PrestigeCars/
 ├── cars/                # App handling listings and car logic
 ├── users/               # App for user registration and dashboard
