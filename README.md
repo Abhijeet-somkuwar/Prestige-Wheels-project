@@ -41,7 +41,7 @@ PrestigeCars/
 
 🚀 Getting Started
 1. Clone the Repository
-git clone https://github.com/your-username/prestigecars.git
+git clone (https://github.com/Abhijeet-somkuwar/Prestige-Wheels-project.git)
 cd prestigecars
 
 
