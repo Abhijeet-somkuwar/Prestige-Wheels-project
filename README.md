@@ -21,7 +21,7 @@ PrestigeCars is a Django-based web application that allows users to buy and sell
 
 - **Backend**: Django (Python)
 - **Frontend**: HTML, CSS, Bootstrap, JavaScript
-- **Database**: SQLite (for development)
+- **Database**: postgresql (for development)
 - **Payment Gateway**: Razorpay (test mode)
 - **Email Service**: Django's built-in email backend (console-based for dev)
 
