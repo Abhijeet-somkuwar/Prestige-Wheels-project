@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REST API Login Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-login:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-clear {
+            background: #f0f0f0;
+            color: #555;
+        }
+        
+        .btn-clear:hover {
+            background: #e0e0e0;
+        }
+        
+        .response-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .response-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        #response {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: none;
+        }
+        
+        #response.show {
+            display: block;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #0c5aa0;
+            line-height: 1.6;
+        }
+        
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 REST API Login Tester</h1>
+        <p class="subtitle">Test the Django REST API login endpoint</p>
+        
+        <div class="info-box">
+            <strong>ℹ️ Test Credentials:</strong>
+            Use any username/password from your database. 
+            Or register a new account first on the main website.
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="Enter your username"
+                    value="test"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your password"
+                    value="password"
+                >
+            </div>
+            
+            <div class="button-group">
+                <button type="button" class="btn-login" onclick="loginAPI()">
+                    Test API Login
+                </button>
+                <button type="button" class="btn-clear" onclick="clearForm()">
+                    Clear
+                </button>
+            </div>
+        </form>
+        
+        <div class="response-section">
+            <div class="response-title">API Response</div>
+            <div id="statusBadge"></div>
+            <div id="response"></div>
+        </div>
+    </div>
+
+    <script>
+        async function loginAPI() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const responseDiv = document.getElementById('response');
+            const statusBadge = document.getElementById('statusBadge');
+            
+            if (!username || !password) {
+                alert('Please enter username and password');
+                return;
+            }
+            
+            statusBadge.innerHTML = '<div class="status loading">⏳ Loading...</div>';
+            responseDiv.classList.add('show');
+            responseDiv.textContent = 'Sending request...';
+            
+            try {
+                const response = await fetch('/accounts/api/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                const statusCode = response.status;
+                
+                // Show status badge
+                if (response.ok) {
+                    statusBadge.innerHTML = `<div class="status success">✅ Success (${statusCode})</div>`;
+                } else {
+                    statusBadge.innerHTML = `<div class="status error">❌ Error (${statusCode})</div>`;
+                }
+                
+                // Format and display response
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+                console.log('Response Status:', statusCode);
+                console.log('Response Data:', data);
+                
+            } catch (error) {
+                statusBadge.innerHTML = '<div class="status error">❌ Network Error</div>';
+                responseDiv.textContent = `Error: ${error.message}\n\nMake sure the server is running at http://127.0.0.1:8000/`;
+                console.error('Error:', error);
+            }
+        }
+        
+        function clearForm() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('response').classList.remove('show');
+            document.getElementById('statusBadge').innerHTML = '';
+        }
+        
+        // Allow Enter key to submit form
+        document.getElementById('loginForm').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginAPI();
+            }
+        });
+        
+        // Log helpful message on page load
+        console.log('%c🎓 REST API Tester Loaded!', 'font-size: 20px; color: #667eea; font-weight: bold;');
+        console.log('Open the Network tab (F12) to see:');
+        console.log('1. Request headers');
+        console.log('2. Request body (username & password)');
+        console.log('3. Response body (user info)');
+        console.log('4. Response status (200 = success, 401 = failure)');
+    </script>
+</body>
+</html>

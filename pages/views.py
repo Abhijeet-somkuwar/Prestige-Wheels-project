@@ -4,6 +4,7 @@ from cars.models import Car
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.contrib import messages
+from django.conf import settings
 
 # Create your views here.
 
@@ -53,7 +54,7 @@ def contact(request):
         send_mail(
                 email_subject,
                 message_body,
-                'abhijeet.idevifysolutions@gmail.com',
+                settings.DEFAULT_FROM_EMAIL,
                 [admin_email],
                 fail_silently=False,
             )

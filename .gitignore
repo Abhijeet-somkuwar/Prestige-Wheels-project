@@ -146,3 +146,9 @@ dmypy.json
 /media
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+
+# Project-specific
+.dist/
+*.sqlite3
+project_dump.json
+/.env

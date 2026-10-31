@@ -113,8 +113,8 @@ def initiate_payment(request, id):
         return redirect('car_detail', id=car.id)
 
 
-    # Razorpay test credentials
-    client = razorpay.Client(auth=("rzp_test_6wZ986hRbPrnoS", "56gj07Rf6EL4i8Olc3Z1UyLn"))
+    # Razorpay credentials come from environment variables (see .env.example)
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
     amount = min(car.price * 100, 50000000)
 
     data = {
@@ -137,7 +137,7 @@ def initiate_payment(request, id):
     "car": car,
     "order": order,
     "razorpay_order_id": payment['id'],  # Razorpay's order ID
-    "razorpay_key": "rzp_test_6wZ986hRbPrnoS"
+    "razorpay_key": settings.RAZORPAY_KEY_ID
 }
 
 

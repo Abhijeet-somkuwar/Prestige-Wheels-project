@@ -7,6 +7,12 @@ from django.core.mail import send_mail
 from django.conf import settings
 from cars.models import CarOrder
 
+# REST Framework imports
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import LoginSerializer, UserSerializer
+
 
 # Create your views here.
 
@@ -87,4 +93,52 @@ def logout(request):
         auth.logout(request)
         return redirect('home')
     return redirect('home')
+
+
+# ===== REST API ENDPOINTS =====
+
+class LoginAPIView(APIView):
+    """
+    REST API endpoint for user login.
+    
+    POST request should include:
+    {
+        "username": "your_username",
+        "password": "your_password"
+    }
+    
+    Returns:
+    {
+        "message": "Login successful",
+        "user": {
+            "id": 1,
+            "username": "john",
+            "email": "john@example.com",
+            "first_name": "John",
+            "last_name": "Doe"
+        }
+    }
+    """
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            
+            # Log the user in using Django's session framework
+            auth.login(request, user)
+            
+            # Serialize the user data
+            user_serializer = UserSerializer(user)
+            
+            return Response({
+                'message': 'Login successful',
+                'user': user_serializer.data
+            }, status=status.HTTP_200_OK)
+        
+        return Response({
+            'message': 'Login failed',
+            'errors': serializer.errors
+        }, status=status.HTTP_401_UNAUTHORIZED)
+
 
